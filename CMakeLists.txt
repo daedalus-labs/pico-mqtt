@@ -1,31 +1,35 @@
 # cmake-format: off
-set(${MQTT_LIBRARY_NAME} pico-mqtt)
-pico_add_library(${MQTT_LIBRARY_NAME} NOFLAG)
+if (NOT TARGET pico_mqtt)
+    pico_add_library(pico_mqtt NOFLAG)
 
-add_dependencies(
-    ${MQTT_LIBRARY_NAME}
-    pico_lwip_mqtt
-    pico_stdlib
-)
+    target_compile_options(
+        pico_mqtt
+        INTERFACE
+            -Wall -Werror -Wno-format -Wno-unused-function -Wno-maybe-uninitialized
+    )
 
-target_compile_options(
-    ${MQTT_LIBRARY_NAME}
-    PRIVATE
-        -Wall -Werror -Wno-format -Wno-unused-function -Wno-maybe-uninitialized
-)
+    target_include_directories(
+        pico_mqtt_headers
+        INTERFACE
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
 
-target_include_directories(
-    ${MQTT_LIBRARY_NAME}
-    INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
-target_sources(
-    ${MQTT_LIBRARY_NAME}
-    PRIVATE
-        src/dns/resolver.cpp
-        src/mqtt/detail/context.cpp
-        src/mqtt/client.cpp
-        src/mqtt.cpp
-)
+    target_sources(
+        pico_mqtt
+        INTERFACE
+            src/dns/resolver.cpp
+            src/mqtt/detail/context.cpp
+            src/mqtt/client.cpp
+            src/mqtt.cpp
+    )    
+    
+    target_link_libraries(
+        pico_mqtt
+        INTERFACE
+            pico_cyw43_arch_lwip_threadsafe_background
+            pico_lwip_mqtt
+            pico_stdlib
+    )
+endif()
 # cmake-format: on

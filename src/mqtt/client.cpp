@@ -5,8 +5,8 @@ SPDX-License-Identifier: BSD-3-Clause
 
 #include "mqtt/client.hpp"
 
+#include "constants.hpp"
 #include "dns/resolver.hpp"
-#include "mqtt/constants.hpp"
 #include "mqtt/detail/context.hpp"
 
 #include <lwip/apps/mqtt.h>
@@ -219,7 +219,7 @@ void Client::_init()
     if (_led_pin < NUM_BANK0_GPIOS) {
         gpio_init(_led_pin);
         gpio_set_dir(_led_pin, GPIO_OUT);
-        gpio_put(_led_pin, LOW);
+        gpio_put(_led_pin, OFF);
     }
 
     auto status_callback = std::bind(&Client::_onConnectionStatusChanged, this, std::placeholders::_1);

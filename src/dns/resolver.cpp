@@ -6,7 +6,7 @@ Based on code Copyright (c) 2023 Erich Styger
 Original code is BSD-3-Clause
 ------------------------------------------------------------------------------*/
 
-#include "connectivity/dns/resolver.hpp"
+#include "dns/resolver.hpp"
 
 #include <lwip/dns.h>
 #include <lwip/ip_addr.h>
